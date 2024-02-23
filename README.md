@@ -37,6 +37,12 @@ Run the code:
 cargo run
 ```
 
+> At first, it doesn't work because your ~/.wallpapers folder is empty or does not even exist, the program warns about it. You can copy all pictures in `pics` folder and try again.
+
+```bash
+cp -r ./pics/* ~/.wallpapers
+```
+
 <h2>License</h2>
 
 This project is licensed under MIT. Check [LICENSE](./LICENSE)
