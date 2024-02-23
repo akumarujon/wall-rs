@@ -8,17 +8,18 @@
 
 <h2>Outline</h2>
 
-- Fix the bug with detecting the pics folder.
-- Create a mirror repository for storing pictures.
-- Add a feature to change the wallpaper every X time.
-- Rename the project.
-- Add a feature to clone the mirror repository.
+
+- [ ] Fix the bug with detecting the pics folder.
+- [ ] Create a mirror repository for storing pictures.
+- [ ] Add a feature to change the wallpaper every X time.
+- [ ] Rename the project.
+- [ ] Add a feature to clone the mirror repository.
 
 <h2>Known issues.</h2>
 
-- Path manipulating is not very good and doesn't work in Windows.
-- The code is not very well-written.
-- Problems with cloning the mirror repository because of its huge size, currently it is [Anime-Girls-Holding-Programming-Books](https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books)
+- [ ] Path manipulating is not very good and doesn't work in Windows.
+- [ ] The code is not very well-written.
+- [ ] Problems with cloning the mirror repository because of its huge size, currently it is [Anime-Girls-Holding-Programming-Books](https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books)
 
 <h2>Usage</h2>
 
