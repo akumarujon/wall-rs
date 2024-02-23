@@ -25,10 +25,13 @@ fn is_folder_empty(folder_path: &str) -> bool {
 
 fn main() {
     let wallpapers_path = if cfg!(windows) {
-        format!("{}\\.wallpapers", std::env::var("HOMEPATH").unwrap())
+        format!("C:{}\\.wallpapers", std::env::var("HOMEPATH").unwrap())
     } else {
         format!("{}/.wallpapers", std::env::var("HOME").unwrap())
     };
+
+    println!("{:?}", wallpaper::get());
+
 
     let url = "https://github.com/akumarujon/wall-rs-mirror";
 
