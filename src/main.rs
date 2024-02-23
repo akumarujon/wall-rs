@@ -1,6 +1,5 @@
 use std::path::Path;
 use std::fs;
-use std::process::Command;
 use rand::seq::SliceRandom;
 use rand;
 
@@ -15,10 +14,10 @@ fn is_folder_empty(folder_path: &str) -> bool {
 
 
 fn main() {
-    let path: String = "/home/t34/dev/projects/wall-rs/pics/Kaori_Miyazono_Rust.png".to_string();
+    let _path: String = "/home/t34/dev/projects/wall-rs/pics/Kaori_Miyazono_Rust.png".to_string();
     let wallpapers_path = "/home/t34/dev/projects/wall-rs/pics/";
 
-    let url = "https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books";
+    let _url = "https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books";
 
     
 
