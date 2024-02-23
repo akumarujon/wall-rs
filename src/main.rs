@@ -14,7 +14,6 @@ use wall_rs::{Cli, Commands};
 //     println!("Read file: {:?}", another_one);
 // }
 
-
 fn main() {
     let args = Cli::parse();
 

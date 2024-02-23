@@ -4,8 +4,8 @@ pub mod wall;
 
 use clap::{Parser, Subcommand};
 
-/// A fictional versioning CLI
-#[derive(Debug, Parser)] // requires `derive` feature
+/// Wallpaper manager for you
+#[derive(Debug, Parser)]
 #[command(name = "wall")]
 #[command(about = "Wallpaper manager for you", long_about = None)]
 pub struct Cli {
