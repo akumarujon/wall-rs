@@ -31,7 +31,7 @@ fn main() {
     };
 
     println!("{:?}", wallpaper::get());
-
+    // added by TohirDev
 
     let url = "https://github.com/akumarujon/wall-rs-mirror";
 
