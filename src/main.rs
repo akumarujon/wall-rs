@@ -1,7 +1,9 @@
-use std::path::Path;
-use std::fs;
-use rand::seq::SliceRandom;
 use rand;
+use rand::seq::SliceRandom;
+use std::fs;
+use std::path::Path;
+
+use git2::Repository;
 
 use wallpaper;
 
@@ -16,11 +18,10 @@ use wallpaper;
 /// * `bool` - Returns true if the folder is empty, otherwise false.
 fn is_folder_empty(folder_path: &str) -> bool {
     if let Ok(entries) = fs::read_dir(folder_path) {
-        return entries.count() == 0
+        return entries.count() == 0;
     }
     false
 }
-
 
 fn main() {
     let wallpapers_path = if cfg!(windows) {
@@ -29,45 +30,55 @@ fn main() {
         format!("{}/.wallpapers", std::env::var("HOME").unwrap())
     };
 
-
     // TODO change this to own mirror repository
-    let _url = "https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books";
-
-    
+    let url = "https://github.com/akumarujon/wall-rs-mirror";
 
     if !Path::new(&wallpapers_path.clone()).exists() {
-            match fs::create_dir(wallpapers_path.clone()) {
-                Ok(()) => {
-                    println!("Folder created.");
-                },
-                Err(e) => println!("Error: {}", e),
+        println!("Folder not found.");
+        println!("Clonning the repo.");
+        match Repository::clone(url, wallpapers_path.clone()) {
+            Ok(_repo) => {
+                println!("Clonned the repo.");
             }
-
-    } 
-    
+            Err(e) => println!("Error: {}", e),
+        }
+    }
 
     // TODO: download all the images from the mirror.
     if is_folder_empty(wallpapers_path.clone().as_str()) {
-        println!("Folder is empty");   
+        std::fs::remove_dir_all(wallpapers_path.clone()).unwrap();
+        println!("No content was found. Clonning the repo.");
+        match Repository::clone(url, wallpapers_path.clone()) {
+            Ok(_repo) => {
+                println!("Clonned the repo.")
+            }
+            Err(e) => println!("Error: {}", e),
+        }
+        
     }
 
     let paths = match fs::read_dir(wallpapers_path) {
-        Ok(paths) => paths
-            .map(|entry| entry.unwrap().path())
-            .collect::<Vec<_>>(),
+        Ok(paths) => paths.map(|entry| entry.unwrap().path()).collect::<Vec<_>>(),
         Err(_) => {
             eprintln!("Failed to read directory.");
             return;
         }
     };
 
-    let mut rng = rand::thread_rng(); 
+    let mut rng = rand::thread_rng();
     let path = paths.choose(&mut rng).unwrap();
+
+    println!("{}", path.display());
+
+    if !path.exists() {
+        println!("{} does not exist.", path.display());
+        std::process::exit(1);
+    }
 
     match wallpaper::set_from_path(&path.display().to_string()) {
         Ok(()) => println!("Success"),
         Err(e) => println!("Error: {}", e),
     }
-    
+
     wallpaper::set_mode(wallpaper::Mode::Crop).unwrap();
 }
