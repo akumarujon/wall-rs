@@ -1,3 +1,4 @@
+use std::process::exit;
 use clap::Parser;
 use wall_rs::{Cli, Commands};
 
@@ -18,8 +19,20 @@ fn main() {
     let args = Cli::parse();
 
     match args.command {
-        Commands::Set { remote } => {
-            println!("{}", remote)
+        Commands::Set { path } => {
+            let path = match path.to_str() {
+                Some(p) => p,
+                None => {
+                    eprintln!("Well, you passed wrong path");
+                    exit(1);
+                }
+            };
+
+            if wallpaper::set_from_path(path).is_ok() {
+                println!("Voila!");
+            } 
         }
+        
+        
     };
 }

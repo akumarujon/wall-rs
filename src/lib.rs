@@ -2,6 +2,7 @@ pub mod config;
 pub mod error;
 pub mod wall;
 
+use std::path::PathBuf;
 use clap::{Parser, Subcommand};
 
 /// Wallpaper manager for you
@@ -15,10 +16,10 @@ pub struct Cli {
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-    /// Clones repos
+    /// Set a wallpaper to your desktop
     #[command(arg_required_else_help = true)]
     Set {
-        /// The remote to clone
-        remote: String,
+        /// Path to the wallpaper
+        path: PathBuf,
     },
 }
