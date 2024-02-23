@@ -8,7 +8,7 @@ fn main() {
 
     conf.write(CONFIG.to_string()).unwrap();
 
-    let another_one = Config::from_file(&Path::new(CONFIG));
+    let another_one = Config::from_file(Path::new(CONFIG));
 
     println!("Read file: {:?}", another_one);
 }
