@@ -30,7 +30,6 @@ fn main() {
         format!("{}/.wallpapers", std::env::var("HOME").unwrap())
     };
 
-    // TODO change this to own mirror repository
     let url = "https://github.com/akumarujon/wall-rs-mirror";
 
     if !Path::new(&wallpapers_path.clone()).exists() {
@@ -44,7 +43,6 @@ fn main() {
         }
     }
 
-    // TODO: download all the images from the mirror.
     if is_folder_empty(wallpapers_path.clone().as_str()) {
         std::fs::remove_dir_all(wallpapers_path.clone()).unwrap();
         println!("No content was found. Clonning the repo.");
