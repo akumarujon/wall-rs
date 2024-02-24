@@ -1,5 +1,6 @@
 pub mod config;
 pub mod error;
+pub mod macros;
 pub mod wall;
 
 use clap::{Parser, Subcommand};
@@ -21,5 +22,11 @@ pub enum Commands {
     Set {
         /// Path to the wallpaper
         path: PathBuf,
+    },
+
+    /// Set random picture from assets
+    Random {
+        /// Path to directory of assets
+        path: Option<PathBuf>,
     },
 }
