@@ -25,16 +25,17 @@ impl Config {
 
     #[cfg(target_os = "macos")]
     fn get_target() -> PathBuf {
-        
+        PathBuf::new()
     }
 
     #[cfg(target_os = "linux")]
     fn get_target() -> PathBuf {
-
+        PathBuf::new()
     }
 
     #[cfg(target_os = "windows")]
     fn get_target() -> PathBuf {
+        PathBuf::new()
 
     }
 
