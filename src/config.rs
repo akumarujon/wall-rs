@@ -1,4 +1,5 @@
 use crate::error::Error;
+use crate::matcher;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::fs::File;
@@ -39,7 +40,10 @@ impl Config {
         result.push_str(to.as_ref());
 
         return match Path::new(&result).exists() {
-            true => Ok(PathBuf::from_str(&result).unwrap()),
+            true => Ok(match PathBuf::from_str(&result) {
+                Ok(p) => p,
+                Err(_) => return Err(Error::PathBufParseError),
+            }),
             false => return Err(Error::NoCorrespondingPathError),
         };
     }
@@ -50,20 +54,11 @@ impl Config {
             None => return Err(Error::NoCorrespondingPathError),
         };
 
-        let config_dir = match Config::walk(config_path.to_str().unwrap(), "wall") {
-            Ok(p) => p,
-            Err(e) => return Err(e),
-        };
+        let config_dir = matcher!(Config::walk(config_path.to_str().unwrap(), "wall"));
 
-        let config = match Config::walk(config_dir.to_str().unwrap(), "config.toml") {
-            Ok(p) => p,
-            Err(e) => return Err(e),
-        };
+        let config = matcher!(Config::walk(config_dir.to_str().unwrap(), "config.toml"));
 
-        let read = match Config::from_file(config) {
-            Ok(d) => d,
-            Err(e) => return Err(e),
-        };
+        let read = matcher!(Config::from_file(config));
 
         Ok(read)
     }

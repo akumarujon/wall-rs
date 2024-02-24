@@ -1,10 +1,11 @@
 use crate::config::Config;
 use crate::error::Error;
+use crate::showroom;
+use rand::prelude::*;
 use std::fs;
 use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
-use rand::prelude::*;
 
 pub struct Wall {
     pub config: Option<Config>,
@@ -43,7 +44,10 @@ impl Wall {
                 let path = entry.path();
 
                 if path.is_dir() {
-                    Self::get_pics(&path).unwrap();
+                    match Self::get_pics(&path) {
+                        Ok(p) => p,
+                        Err(_) => return Err(Error::NotListableDirectory),
+                    };
                 } else {
                     let check = path.to_str().unwrap();
                     if check.ends_with(".png") || check.ends_with(".jpg") {
@@ -57,22 +61,36 @@ impl Wall {
     }
 
     pub fn random(&self, path: Option<PathBuf>) {
-        let mut rng = rand::thread_rng();
+        let mut rng = thread_rng();
         let mut location = PathBuf::new();
 
         if let Some(c) = &self.config {
-            location = PathBuf::from_str(&c.path).unwrap()
+            location = match PathBuf::from_str(&c.path) {
+                Ok(p) => p,
+                Err(e) => {
+                    eprintln!("Can't parse the path: {}", e);
+                    exit(1);
+                }
+            }
         }
 
         if path.is_some() {
             location = path.unwrap()
         }
 
-        let mut pics = Self::get_pics(&location).unwrap();
+        let mut pics = showroom!(Self::get_pics(&location));
 
         pics.shuffle(&mut rng);
 
-        self.set(pics.first().unwrap().to_owned())
+        let first = match pics.first() {
+            Some(p) => p,
+            None => {
+                eprintln!("Seems like there were no pictures!");
+                exit(1)
+            }
+        };
+
+        self.set(first.to_owned())
     }
 }
 

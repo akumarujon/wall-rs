@@ -9,6 +9,8 @@ pub enum Error {
     WriteConfigError,
     NoCorrespondingPathError,
     ReadDirError,
+    PathBufParseError,
+    NotListableDirectory,
 }
 
 impl Debug for Error {
@@ -25,6 +27,8 @@ impl Debug for Error {
                 "Failed while trying to find config file, probably directories doesn't exist."
             ),
             Error::ReadDirError => write!(f, "Failed while trying read contents in a directory"),
+            Error::PathBufParseError => write!(f, "Can't parse the path"),
+            Error::NotListableDirectory => write!(f, "The following directory can't be listed"),
         }
     }
 }
