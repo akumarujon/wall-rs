@@ -36,7 +36,6 @@ impl Config {
     #[cfg(target_os = "windows")]
     fn get_target() -> PathBuf {
         PathBuf::new()
-
     }
 
     pub fn from_file<T>(path: T) -> Result<Config, Error>

@@ -2,8 +2,8 @@ pub mod config;
 pub mod error;
 pub mod wall;
 
-use std::path::PathBuf;
 use clap::{Parser, Subcommand};
+use std::path::PathBuf;
 
 /// Wallpaper manager for you
 #[derive(Debug, Parser)]

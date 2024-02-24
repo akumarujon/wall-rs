@@ -1,5 +1,5 @@
-use std::process::exit;
 use clap::Parser;
+use std::process::exit;
 use wall_rs::{Cli, Commands};
 
 // use std::path::Path;
@@ -30,9 +30,7 @@ fn main() {
 
             if wallpaper::set_from_path(path).is_ok() {
                 println!("Voila!");
-            } 
+            }
         }
-        
-        
     };
 }
