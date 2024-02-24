@@ -7,6 +7,8 @@ pub enum Error {
     DeserializeError,
     OpenConfigError,
     WriteConfigError,
+    NoCorrespondingPathError,
+    ReadDirError,
 }
 
 impl Debug for Error {
@@ -18,6 +20,11 @@ impl Debug for Error {
             Error::DeserializeError => write!(f, "Failed while deserializing data"),
             Error::OpenConfigError => write!(f, "Failed while trying to read config"),
             Error::WriteConfigError => write!(f, "Failed while trying to write data to a file"),
+            Error::NoCorrespondingPathError => write!(
+                f,
+                "Failed while trying to find config file, probably directories doesn't exist."
+            ),
+            Error::ReadDirError => write!(f, "Failed while trying read contents in a directory"),
         }
     }
 }

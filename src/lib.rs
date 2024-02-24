@@ -22,4 +22,10 @@ pub enum Commands {
         /// Path to the wallpaper
         path: PathBuf,
     },
+
+    /// Set random picture from assets
+    Random {
+        /// Path to directory of assets
+        path: Option<PathBuf>,
+    },
 }

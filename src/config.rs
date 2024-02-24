@@ -5,6 +5,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::Write;
 use std::path::{Path, PathBuf};
+use std::str::FromStr;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -23,19 +24,48 @@ impl Config {
         }
     }
 
-    #[cfg(target_os = "macos")]
-    fn get_target() -> PathBuf {
-        PathBuf::new()
+    pub fn walk<T>(path: T, to: T) -> Result<PathBuf, Error>
+    where
+        T: AsRef<str>,
+    {
+        let mut result = String::new();
+
+        result.push_str(path.as_ref());
+
+        if !result.ends_with('/') {
+            result.push('/')
+        }
+
+        result.push_str(to.as_ref());
+
+        return match Path::new(&result).exists() {
+            true => Ok(PathBuf::from_str(&result).unwrap()),
+            false => return Err(Error::NoCorrespondingPathError),
+        };
     }
 
-    #[cfg(target_os = "linux")]
-    fn get_target() -> PathBuf {
-        PathBuf::new()
-    }
+    pub fn from_local_conf() -> Result<Config, Error> {
+        let config_path = match dirs::config_dir() {
+            Some(p) => p,
+            None => return Err(Error::NoCorrespondingPathError),
+        };
 
-    #[cfg(target_os = "windows")]
-    fn get_target() -> PathBuf {
-        PathBuf::new()
+        let config_dir = match Config::walk(config_path.to_str().unwrap(), "wall") {
+            Ok(p) => p,
+            Err(e) => return Err(e),
+        };
+
+        let config = match Config::walk(config_dir.to_str().unwrap(), "config.toml") {
+            Ok(p) => p,
+            Err(e) => return Err(e),
+        };
+
+        let read = match Config::from_file(config) {
+            Ok(d) => d,
+            Err(e) => return Err(e),
+        };
+
+        Ok(read)
     }
 
     pub fn from_file<T>(path: T) -> Result<Config, Error>
@@ -98,5 +128,17 @@ impl Config {
             .expect("Failed writing to a file");
 
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::Config;
+
+    #[test]
+    fn some() {
+        let config = Config::from_local_conf();
+
+        println!("{:?}", config);
     }
 }
