@@ -4,7 +4,7 @@ use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::Write;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
@@ -21,6 +21,21 @@ impl Config {
             path: path.to_string(),
             interval,
         }
+    }
+
+    #[cfg(target_os = "macos")]
+    fn get_target() -> PathBuf {
+        
+    }
+
+    #[cfg(target_os = "linux")]
+    fn get_target() -> PathBuf {
+
+    }
+
+    #[cfg(target_os = "windows")]
+    fn get_target() -> PathBuf {
+
     }
 
     pub fn from_file<T>(path: T) -> Result<Config, Error>

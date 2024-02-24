@@ -2,10 +2,11 @@ pub mod config;
 pub mod error;
 pub mod wall;
 
+use std::path::PathBuf;
 use clap::{Parser, Subcommand};
 
-/// A fictional versioning CLI
-#[derive(Debug, Parser)] // requires `derive` feature
+/// Wallpaper manager for you
+#[derive(Debug, Parser)]
 #[command(name = "wall")]
 #[command(about = "Wallpaper manager for you", long_about = None)]
 pub struct Cli {
@@ -15,10 +16,10 @@ pub struct Cli {
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
-    /// Clones repos
+    /// Set a wallpaper to your desktop
     #[command(arg_required_else_help = true)]
     Set {
-        /// The remote to clone
-        remote: String,
+        /// Path to the wallpaper
+        path: PathBuf,
     },
 }
