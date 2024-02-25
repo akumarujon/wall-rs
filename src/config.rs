@@ -12,6 +12,7 @@ use std::str::FromStr;
 pub struct Config {
     pub path: String,
     pub interval: u32,
+    // pub mode: wallpaper::Mode
 }
 
 impl Config {
@@ -42,7 +43,7 @@ impl Config {
         return match Path::new(&result).exists() {
             true => Ok(match PathBuf::from_str(&result) {
                 Ok(p) => p,
-                Err(_) => return Err(Error::PathBufParseError),
+                Err(err) => return Err(Error::PathBufParseError(err.to_string())),
             }),
             false => return Err(Error::NoCorrespondingPathError),
         };
@@ -71,22 +72,23 @@ impl Config {
 
         let mut file = match file {
             Ok(file) => file,
-            Err(_err) => {
-                // let msg = format!("Error opening file {}: {}", path, err);
-                return Err(Error::FileOpenError);
+            Err(err) => {
+                return Err(Error::FileOpenError(err));
             }
         };
 
         let mut content = String::new();
 
-        file.read_to_string(&mut content)
-            .expect("Couldn't read file to string");
+        match file.read_to_string(&mut content) {
+            Ok(_) => dbg!("Successfully read the data"),
+            Err(err) => return Err(Error::ReadConfigError(err)),
+        };
 
         let config = toml::from_str::<Config>(&content);
 
         let result = match config {
             Ok(d) => d,
-            Err(_) => return Err(Error::SerializeError),
+            Err(err) => return Err(Error::SerializeError(err.to_string())),
         };
 
         Ok(result)
@@ -111,12 +113,12 @@ impl Config {
 
         let mut file = match file {
             Ok(f) => f,
-            Err(_) => return Err(Error::WriteConfigError),
+            Err(err) => return Err(Error::WriteConfigError(err)),
         };
 
         let deser = match toml::to_string_pretty(self) {
             Ok(s) => s,
-            Err(_) => return Err(Error::DeserializeError),
+            Err(err) => return Err(Error::DeserializeError(err.to_string())),
         };
 
         file.write_all(deser.as_bytes())
