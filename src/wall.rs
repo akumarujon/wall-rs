@@ -114,6 +114,10 @@ impl Wall {
             None => target.push_str(DEFAULT_TARGET),
         };
     }
+
+    pub fn auto(&self) {
+        dbg!("Trying to setup wallpaper automatically!");
+    }
 }
 
 #[cfg(test)]
