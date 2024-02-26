@@ -29,4 +29,13 @@ pub enum Commands {
         /// Path to directory of assets
         path: Option<PathBuf>,
     },
+
+    /// Generate configurations and fetch assets
+    Install {
+        /// Url to fetch from assets
+        url: Option<String>,
+    },
+
+    /// Automatically manage wallpaper
+    Auto,
 }

@@ -6,11 +6,14 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+asky = "0.1.1"
 clap = { version = "4.5.1", features = ["derive"] }
+cron = "0.12.0"
 dirs = "5.0.1"
 rand = "0.8.5"
-reqwest = { version = "0.11.24", features = ["blocking"] }
+reqwest = { version = "0.11.24", features = ["blocking", "json"] }
 serde = { version = "1.0.197", features = ["derive"] }
 toml = "0.8.10"
 walkdir = "2.4.0"
 wallpaper = "3.2.0"
+zip = "0.6.6"
