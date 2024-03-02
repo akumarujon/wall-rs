@@ -1,6 +1,7 @@
 pub mod config;
 pub mod error;
 pub mod macros;
+pub mod source;
 pub mod wall;
 
 use clap::{Parser, Subcommand};

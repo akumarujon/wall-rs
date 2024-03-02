@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="./assets/icon.png" width="350px">
+    <img src=".github/assets/icon.png" width="350px">
 </p>
 
 <h1 align="center">wall-rs</h1>

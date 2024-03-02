@@ -1,3 +1,4 @@
+use octocrab::Error as OctoError;
 use std::fmt::{Debug, Formatter};
 
 pub enum Error {
@@ -10,6 +11,12 @@ pub enum Error {
     ReadDirError(std::io::Error),
     PathBufParseError(String),
     NotListableDirectory(String),
+    ReleaseFetchError(OctoError),
+    NoVersionFound,
+    NoInternetConnection,
+    CantCreateDownloadedFile(String),
+    CantCreateCursorBytes,
+    CantCopyBytes
 }
 
 impl Debug for Error {
@@ -27,6 +34,12 @@ impl Debug for Error {
             Error::ReadDirError(io) => write!(f, "Failed while trying read contents in a directory: {}", io),
             Error::PathBufParseError(target) => write!(f, "Can't parse the path: {}", target),
             Error::NotListableDirectory(target) => write!(f, "The following {} directory can't be listed", target),
+            Error::ReleaseFetchError(trace) => write!(f, "Failed to fetch releases: {}", trace),
+            Error::NoVersionFound => write!(f, "Couldn't get latest version from list"),
+            Error::NoInternetConnection => write!(f, "Seems like you don't have access to Internet, right?)"),
+            Error::CantCreateDownloadedFile(target) => write!(f, "Couldn't create the file {}", target),
+            Error::CantCreateCursorBytes => write!(f, "Can't create cursor bytes for response"),
+            Error::CantCopyBytes => write!(f, "Couldn't copy downloaded bytes to file")
         }
     }
 }

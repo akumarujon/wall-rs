@@ -13,16 +13,18 @@ pub struct Config {
     pub path: String,
     pub interval: u32,
     // pub mode: wallpaper::Mode
+    pub version: Option<String>,
 }
 
 impl Config {
-    pub fn new<T>(path: T, interval: u32) -> Config
+    pub fn new<T>(path: T, interval: u32, version: String) -> Config
     where
         T: ToString,
     {
         Config {
             path: path.to_string(),
             interval,
+            version: Some(version),
         }
     }
 

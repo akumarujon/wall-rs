@@ -1,6 +1,7 @@
 use crate::config::Config;
 use crate::error::Error;
 use crate::showroom;
+use crate::source::Source;
 use rand::prelude::*;
 use std::fs;
 use std::path::PathBuf;
@@ -106,13 +107,30 @@ impl Wall {
         self.set(first.to_owned())
     }
 
-    pub fn install(&self, url: Option<String>) {
+    pub async fn install(&self, url: Option<String>) -> Result<(), Error> {
         let mut target = String::new();
+        let source = Source::new(None);
+
+        // Download link:
+        // https://github.com/akumarujon/wall-rs-mirror/releases/tag/v0.0.3
+        // https://github.com/akumarujon/wall-rs-mirror/releases/download/v0.0.3/assets.zip
 
         match url {
             Some(l) => target.push_str(&l),
-            None => target.push_str(DEFAULT_TARGET),
+            None => {
+                let mut versions = source.get_latest_version().await.unwrap();
+                versions = format!("https://github.com/akumarujon/wall-rs-mirror/releases/download/{}/assets.zip", versions);
+
+                target.push_str(&versions)
+            },
         };
+
+        const FILENAME: &str = "assets.zip";
+
+        source.download_file(target, FILENAME.to_string()).await.unwrap();
+        source.extract_file(FILENAME).unwrap();
+
+        Ok(())
     }
 
     pub fn auto(&self) {
