@@ -7,6 +7,8 @@ use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
 
+static DEFAULT_TARGET: &str = "https://github.com/akumarujon/wall-rs-mirror";
+
 pub struct Wall {
     pub config: Option<Config>,
 }
@@ -36,7 +38,7 @@ impl Wall {
         if dir.is_dir() {
             let read_dir = match fs::read_dir(dir) {
                 Ok(e) => e,
-                Err(_) => return Err(Error::ReadDirError),
+                Err(err) => return Err(Error::ReadDirError(err)),
             };
 
             for entry in read_dir {
@@ -46,7 +48,11 @@ impl Wall {
                 if path.is_dir() {
                     match Self::get_pics(&path) {
                         Ok(p) => p,
-                        Err(_) => return Err(Error::NotListableDirectory),
+                        Err(_) => {
+                            return Err(Error::NotListableDirectory(String::from(
+                                path.to_str().unwrap(),
+                            )))
+                        }
                     };
                 } else {
                     let check = path.to_str().unwrap();
@@ -78,6 +84,13 @@ impl Wall {
             location = path.unwrap()
         }
 
+        if location.to_str().unwrap().is_empty() {
+            eprintln!(
+                "Seems like we couldn't find config either you didn't pass path to assets folder..."
+            );
+            exit(1);
+        }
+
         let mut pics = showroom!(Self::get_pics(&location));
 
         pics.shuffle(&mut rng);
@@ -91,6 +104,19 @@ impl Wall {
         };
 
         self.set(first.to_owned())
+    }
+
+    pub fn install(&self, url: Option<String>) {
+        let mut target = String::new();
+
+        match url {
+            Some(l) => target.push_str(&l),
+            None => target.push_str(DEFAULT_TARGET),
+        };
+    }
+
+    pub fn auto(&self) {
+        dbg!("Trying to setup wallpaper automatically!");
     }
 }
 

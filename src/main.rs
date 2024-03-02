@@ -13,7 +13,8 @@ fn main() {
 
     match args.command {
         Commands::Set { path } => wall.set(path),
-
         Commands::Random { path } => wall.random(path),
+        Commands::Install { url } => wall.install(url),
+        Commands::Auto => wall.auto(),
     };
 }
