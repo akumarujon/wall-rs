@@ -10,7 +10,7 @@ async fn main() {
         Ok(c) => Some(c),
         Err(_) => None,
     };
-    let wall = Wall::new(config);
+    let mut wall = Wall::new(config);
 
     match args.command {
         Commands::Set { path } => wall.set(path),

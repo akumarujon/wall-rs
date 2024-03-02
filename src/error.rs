@@ -16,7 +16,7 @@ pub enum Error {
     NoInternetConnection,
     CantCreateDownloadedFile(String),
     CantCreateCursorBytes,
-    CantCopyBytes
+    CantCopyBytes,
 }
 
 impl Debug for Error {

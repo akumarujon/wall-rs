@@ -28,6 +28,10 @@ impl Config {
         }
     }
 
+    pub fn set_version(&mut self, version: String) {
+        self.version = Some(version)
+    }
+
     pub fn walk<T>(path: T, to: T) -> Result<PathBuf, Error>
     where
         T: AsRef<str>,

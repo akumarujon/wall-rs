@@ -8,8 +8,6 @@ use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
 
-static DEFAULT_TARGET: &str = "https://github.com/akumarujon/wall-rs-mirror";
-
 pub struct Wall {
     pub config: Option<Config>,
 }
@@ -107,7 +105,7 @@ impl Wall {
         self.set(first.to_owned())
     }
 
-    pub async fn install(&self, url: Option<String>) -> Result<(), Error> {
+    pub async fn install(&mut self, url: Option<String>) -> Result<(), Error> {
         let mut target = String::new();
         let source = Source::new(None);
 
@@ -119,15 +117,23 @@ impl Wall {
             Some(l) => target.push_str(&l),
             None => {
                 let mut versions = source.get_latest_version().await.unwrap();
-                versions = format!("https://github.com/akumarujon/wall-rs-mirror/releases/download/{}/assets.zip", versions);
+                versions = format!(
+                    "https://github.com/akumarujon/wall-rs-mirror/releases/download/{}/assets.zip",
+                    versions
+                );
 
+                self.config.as_mut().unwrap().set_version(versions.clone());
                 target.push_str(&versions)
-            },
+            }
         };
 
         const FILENAME: &str = "assets.zip";
 
-        source.download_file(target, FILENAME.to_string()).await.unwrap();
+        source
+            .download_file(target, FILENAME.to_string())
+            .await
+            .unwrap();
+
         source.extract_file(FILENAME).unwrap();
 
         Ok(())
@@ -135,6 +141,10 @@ impl Wall {
 
     pub fn auto(&self) {
         dbg!("Trying to setup wallpaper automatically!");
+    }
+
+    pub fn exit(&self) {
+        self.config.as_ref().unwrap().write("").unwrap()
     }
 }
 
