@@ -7,6 +7,7 @@ use std::fs;
 use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
+use path_absolutize::*;
 
 pub struct Wall {
     pub config: Option<Config>,
@@ -17,8 +18,20 @@ impl Wall {
         Wall { config }
     }
 
+    pub fn absolute(&self, path: PathBuf) -> PathBuf {
+        match path.absolutize() {
+            Ok(p) => p.to_path_buf(),
+            Err(_) => {
+                eprintln!("Can't not absolutize the path.");
+                exit(1);
+            }
+        }
+    }
+
     pub fn set(&self, path: PathBuf) {
-        let path = match path.to_str() {
+        let binding = self.absolute(path.clone());
+
+        let path = match binding.to_str() {
             Some(p) => p,
             None => {
                 eprintln!("Well, you passed wrong path");
@@ -82,6 +95,8 @@ impl Wall {
         if path.is_some() {
             location = path.unwrap()
         }
+
+        location = self.absolute(location.clone());
 
         if location.to_str().unwrap().is_empty() {
             eprintln!(
