@@ -16,6 +16,5 @@ async fn main() {
         Commands::Set { path } => wall.set(path),
         Commands::Random { path } => wall.random(path),
         Commands::Install { url } => wall.install(url).await.unwrap(),
-        Commands::Auto => wall.auto(),
     };
 }

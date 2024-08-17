@@ -2,13 +2,14 @@ use crate::config::Config;
 use crate::error::Error;
 use crate::showroom;
 use crate::source::Source;
+use path_absolutize::*;
 use rand::prelude::*;
 use std::fs;
 use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
-use path_absolutize::*;
 
+#[derive(Debug)]
 pub struct Wall {
     pub config: Option<Config>,
 }
@@ -137,7 +138,11 @@ impl Wall {
                     versions
                 );
 
-                self.config.as_mut().unwrap().set_version(versions.clone());
+                match self.config.as_mut() {
+                    Some(c) => c.set_version(versions.clone()),
+                    None => (),
+                };
+
                 target.push_str(&versions)
             }
         };
@@ -152,10 +157,6 @@ impl Wall {
         source.extract_file(FILENAME).unwrap();
 
         Ok(())
-    }
-
-    pub fn auto(&self) {
-        dbg!("Trying to setup wallpaper automatically!");
     }
 
     pub fn exit(&self) {

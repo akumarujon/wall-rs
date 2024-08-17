@@ -37,6 +37,4 @@ pub enum Commands {
         url: Option<String>,
     },
 
-    /// Automatically manage wallpaper
-    Auto,
 }
