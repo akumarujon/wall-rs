@@ -62,8 +62,6 @@ wall-rs <COMMAND>
 
 ## Examples
 
-## Examples
-
 1. Set a specific image as wallpaper:
 
 ```bash
