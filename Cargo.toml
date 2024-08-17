@@ -2,13 +2,18 @@
 name = "wall-rs"
 version = "0.1.0"
 edition = "2021"
+authors = ["akumarujon <akumaru.senju@gmail.com>"]
+description = "Wallpaper manager for you"
+keywords = ["cli", "wallpaper"]
+categories = ["command-line-utilities"]
+repository = "https://github.com/akumarujon/wall-rs"
+license="MIT"
+readme="README.md"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-asky = "0.1.1"
 clap = { version = "4.5.1", features = ["derive"] }
-cron = "0.12.0"
 dirs = "5.0.1"
 octocrab = "0.34.1"
 path-absolutize = "3.1.1"

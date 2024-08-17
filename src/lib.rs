@@ -36,5 +36,4 @@ pub enum Commands {
         /// Url to fetch from assets
         url: Option<String>,
     },
-
 }
