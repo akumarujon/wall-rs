@@ -2,12 +2,12 @@ use crate::config::Config;
 use crate::error::Error;
 use crate::showroom;
 use crate::source::Source;
+use path_absolutize::*;
 use rand::prelude::*;
 use std::fs;
 use std::path::PathBuf;
 use std::process::exit;
 use std::str::FromStr;
-use path_absolutize::*;
 
 pub struct Wall {
     pub config: Option<Config>,
